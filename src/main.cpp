@@ -1,7 +1,12 @@
 #include <iostream>
+#include "IntentRecognizer.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-	std::cout << "Hello World" << std::endl;
+    if(argc > 1)
+    {
+        // Perform IntentRecognition
+    }
+
 	return 0;
 }
