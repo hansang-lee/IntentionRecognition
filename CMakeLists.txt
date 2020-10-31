@@ -8,4 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(
 	${PROJECT_NAME}
 	src/main.cpp
+	src/IntentRecognizer.h
+	src/IntentRecognizer.cpp
 	)
