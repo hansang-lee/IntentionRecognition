@@ -1,11 +1,11 @@
 #include <iostream>
 #include "IntentRecognizer.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
     if(argc > 1)
     {
-        // Perform IntentRecognition
+        IntentRecognizer::PerformIntentRecognition(argc, argv);
     }
 
 	return 0;
