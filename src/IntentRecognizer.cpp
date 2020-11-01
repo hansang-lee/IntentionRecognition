@@ -7,6 +7,7 @@ using namespace std;
 
 IntentRecognizer::IntentRecognizer()
 :m_eTopic(TOPIC_UNDEFINED)
+,m_eSentenceType(TYPE_UNDEFINED)
 ,m_Point("NONE")
 ,m_Place("NONE")
 ,m_Date("NONE")
@@ -22,24 +23,17 @@ IntentRecognizer::~IntentRecognizer()
 
 void IntentRecognizer::PerformIntentRecognition(const int i_numberWords, char** i_sentence)
 {
-    /* Convert [char*] to [string] and save in a vector */
     vector<string> words;
+
+    /* Convert char* to string and push to a vector */
     for(int i=1; i<i_numberWords; i++)
     {
         words.push_back(string(i_sentence[i]));
     }
 
-    /* Classify the type of the given sentence */
-    eSentenceType sentenceType = ClassifySentenceType(words);
-
-    /* Extract Keywords */
-    GetKeywords(words);
-
-    /* Deduce Intent */
-    if((sentenceType != TYPE_UNDEFINED) && (sentenceType != TYPE_NON_QUESTION))
-    {
-        DeduceIntent();
-    }
+    ClassifySentenceType(words);
+    DeduceIntent(words);
+    ShowAnswer();
 }
 
 eSentenceType IntentRecognizer::ClassifySentenceType(const vector<string>& i_sentence)
@@ -102,16 +96,17 @@ eSentenceType IntentRecognizer::ClassifySentenceType(const vector<string>& i_sen
     else if(regex_match(strFirstWord,
         regex("([d|D][o|O]"
             "|[d|D][o|O][e|E][s|S]"
-            "|[d|D][i|I][d|D])")))
+            "|[d|D][i|I][d|D])"
+            "|[h|H][a|A][v|V][e|E]"
+            "|[h|H][a|A][s|S]")))
     {
         return eSentenceType::TYPE_QUESTION_GENERAL;
     }
 
-    std::cout << "NON_QUESTION";
     return eSentenceType::TYPE_NON_QUESTION;
 }
 
-void IntentRecognizer::GetKeywords(const vector<string>& i_sentence)
+void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
 {
     for(auto itWord=next(i_sentence.begin()); itWord!=i_sentence.end(); itWord++)
     {
@@ -130,6 +125,17 @@ void IntentRecognizer::GetKeywords(const vector<string>& i_sentence)
             m_eTopic = TOPIC_WEATHER;
             m_Point = (*itWord);
         }
+
+        /* Extract FACT information */
+        if(regex_match(*itWord,
+            regex("([f|F][a|A][c|C][t|T]"
+            ")")))
+        {
+            m_eTopic = TOPIC_FACT;
+            m_Point = (*itWord);
+        }
+
+        /* Extract CALENDAR information */
 
         /* Extract DATE information */
         else if(regex_match(*itWord,
@@ -183,19 +189,38 @@ void IntentRecognizer::GetKeywords(const vector<string>& i_sentence)
     }
 }
 
-void IntentRecognizer::DeduceIntent()
+void IntentRecognizer::ShowAnswer()
 {
     switch(m_eTopic)
     {
         case TOPIC_WEATHER:
             cout << "Intent: Get Weather";
-            PrintExtractedKeywords();
-            break;
-
-        case TOPIC_SCHEDULE:
+            if(m_Place != "NONE")
+                cout << " " << "City";
+            if(m_Date != "NONE")
+                cout << " " << "Date";
+            if(m_Time != "NONE")
+                cout << " " << "Time";
             break;
 
         case TOPIC_FACT:
+            cout << "Intent: Get Fact";
+            if(m_Place != "NONE")
+                cout << " " << "City";
+            if(m_Date != "NONE")
+                cout << " " << "Date";
+            if(m_Time != "NONE")
+                cout << " " << "Time";
+            break;
+
+        case TOPIC_CALENDAR:
+            cout << "Intent: Get Calendar";
+            if(m_Place != "NONE")
+                cout << " " << "City";
+            if(m_Date != "NONE")
+                cout << " " << "Date";
+            if(m_Time != "NONE")
+                cout << " " << "Time";
             break;
 
         default:

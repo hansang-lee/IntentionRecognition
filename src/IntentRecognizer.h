@@ -24,8 +24,8 @@ enum eTopic
 {
     TOPIC_UNDEFINED,
     TOPIC_WEATHER,
-    TOPIC_SCHEDULE,
-    TOPIC_FACT
+    TOPIC_FACT,
+    TOPIC_CALENDAR
 };
 
 class IntentRecognizer
@@ -37,14 +37,19 @@ public:
     void PerformIntentRecognition(const int i_numberWords, char** i_sentence);
 
 private:
+    /* Register for SentenceType */
+    eSentenceType m_eSentenceType;
+    
+    /* Register for Keywords */
     eTopic m_eTopic;
     string m_Point;
     string m_Place;
     string m_Date;
-    string m_Time; // [HH.MM]<AM|PM>
+    string m_Time; //[HH.MM]<AM|PM>
 
     eSentenceType ClassifySentenceType(const vector<string>& i_sentence);
-    void GetKeywords(const vector<string>& i_sentence);
-    void DeduceIntent();
+    void DeduceIntent(const vector<string>& i_sentence);
+    void ShowAnswer();
+
     void PrintExtractedKeywords();
 };
