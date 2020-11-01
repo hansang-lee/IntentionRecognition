@@ -135,8 +135,6 @@ void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
             m_Point = (*itWord);
         }
 
-        /* Extract CALENDAR information */
-
         /* Extract DATE information */
         else if(regex_match(*itWord,
             regex("([t|T][o|O][d|D][a|A][y|Y]"
@@ -166,8 +164,8 @@ void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
         {
             m_Time = (*itWord);
 
-            if(regex_match(*next(itWord),
-                regex("([a|A][m|M]|[p|P][m|M])")))
+            if((next(itWord) != i_sentence.end())
+                && (regex_match(*next(itWord), regex("([a|A][m|M]|[p|P][m|M])"))))
             {
                 m_Time.append(*(next(itWord)));
             }
@@ -176,15 +174,17 @@ void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
         /* Extract PLACE information */
         else
         {
-            if(itWord == i_sentence.begin())
-            {
-                continue;
-            }
-
-            if(regex_match(*prev(itWord), regex("([i|I][n|N]|[a|A][t|T])")))
+            if((itWord != i_sentence.begin())
+                && (regex_match(*prev(itWord), regex("([i|I][n|N]|[a|A][t|T])"))))
             {
                 m_Place = (*itWord);
             }
+        }
+
+        if((m_eTopic == TOPIC_UNDEFINED)
+            && (m_Time != "NONE"))
+        {
+            m_eTopic = TOPIC_CALENDAR;
         }
     }
 }
@@ -195,32 +195,62 @@ void IntentRecognizer::ShowAnswer()
     {
         case TOPIC_WEATHER:
             cout << "Intent: Get Weather";
+            
             if(m_Place != "NONE")
+            {
                 cout << " " << "City";
+            }
+            
             if(m_Date != "NONE")
+            {
                 cout << " " << "Date";
+            }
+            
             if(m_Time != "NONE")
+            {
                 cout << " " << "Time";
+            }
+            
             break;
 
         case TOPIC_FACT:
             cout << "Intent: Get Fact";
+            
             if(m_Place != "NONE")
+            {
                 cout << " " << "City";
+            }
+
             if(m_Date != "NONE")
+            {
                 cout << " " << "Date";
+            }
+            
             if(m_Time != "NONE")
+            {
                 cout << " " << "Time";
+            }
+            
             break;
 
         case TOPIC_CALENDAR:
             cout << "Intent: Get Calendar";
+            
             if(m_Place != "NONE")
+            {
                 cout << " " << "City";
+            }
+            
             if(m_Date != "NONE")
+            {
                 cout << " " << "Date";
+            }
+            
             if(m_Time != "NONE")
+            {
                 cout << " " << "Time";
+            }
+
             break;
 
         default:
