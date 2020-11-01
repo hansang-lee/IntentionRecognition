@@ -6,6 +6,7 @@ using namespace std;
 
 enum eSentenceType
 {
+    TYPE_UNDEFINED,
     TYPE_QUESTION_WHAT,
     TYPE_QUESTION_WHEN, 
     TYPE_QUESTION_WHERE,
@@ -19,14 +20,31 @@ enum eSentenceType
     TYPE_NON_QUESTION
 };
 
+enum eTopic
+{
+    TOPIC_UNDEFINED,
+    TOPIC_WEATHER,
+    TOPIC_SCHEDULE,
+    TOPIC_FACT
+};
+
 class IntentRecognizer
 {
 public:
 	IntentRecognizer();
 	~IntentRecognizer();
 
-    static void PerformIntentRecognition(const int i_numberWords, char** i_sentence);
+    void PerformIntentRecognition(const int i_numberWords, char** i_sentence);
 
 private:
-    static eSentenceType ClassifySentenceType(const vector<string>& i_words);
+    eTopic m_eTopic;
+    string m_Point;
+    string m_Place;
+    string m_Date;
+    string m_Time; // [HH.MM]<AM|PM>
+
+    eSentenceType ClassifySentenceType(const vector<string>& i_sentence);
+    void GetKeywords(const vector<string>& i_sentence);
+    void DeduceIntent();
+    void PrintExtractedKeywords();
 };

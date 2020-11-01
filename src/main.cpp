@@ -5,7 +5,8 @@ int main(int argc, char** argv)
 {
     if(argc > 1)
     {
-        IntentRecognizer::PerformIntentRecognition(argc, argv);
+        IntentRecognizer ir;
+        ir.PerformIntentRecognition(argc, argv);
     }
 
 	return 0;
