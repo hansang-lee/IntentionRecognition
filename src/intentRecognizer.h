@@ -12,7 +12,6 @@ public:
 
     string GetIntent(const int i_countWords, char** i_words);
     string GetIntent(const string i_sentence);
-    //string GetIntent(const string i_sentence);
 
 private:
     /* Register for Keywords */

@@ -22,7 +22,7 @@ IntentRecognizer::~IntentRecognizer()
 
 string IntentRecognizer::GetIntent(const int i_countWords, char** i_words)
 {
-    /* Convert char** in a string form */
+    /* Convert char** string */
     string converted = Convert2DCharArrayToString(i_countWords, i_words);
 
     return GetIntent(converted);
@@ -32,10 +32,16 @@ string IntentRecognizer::GetIntent(const string i_sentence)
 {
     string recognizedIntent("");
 
-    /* Search for keywords from string and register in member variables */
+    m_Weather.clear();
+    m_Fact.clear();
+    m_Time.clear();
+    m_Date.clear();
+    m_Place.clear();
+
+    /* Search for keywords from string */
     RegisterKeywords(i_sentence);
 
-    /* Recognize intent process */
+    /* Process for intent-recognition */
     if(m_Weather != "")
     {
         recognizedIntent.append("Intent: Get Weather");
@@ -51,9 +57,14 @@ string IntentRecognizer::GetIntent(const string i_sentence)
         recognizedIntent.append("Intent: Get Fact");
     }
 
-    else if(m_Time != "")
+    else if((m_Time != "") || (m_Date != ""))
     {
         recognizedIntent.append("Intent: Check Calendar");
+    }
+
+    else
+    {
+        recognizedIntent.append("No Intent Recognized");
     }
 
     return recognizedIntent;
@@ -103,8 +114,14 @@ void IntentRecognizer::RegisterKeywords(const string i_sentence)
     
     /* TIME */
     searchTarget = regex("([0-9][.|:][0-5][0-9]"
+                        "[0-9][.|:][0-5][0-9][ |][a|A][m|M]"
+                        "[0-9][.|:][0-5][0-9][ |][p|P][m|M]"
                         "|[1][0-9][.|:][0-5][0-9]"
-                        "|[2][0-3][.|:][0-5][0-9])");
+                        "|[1][0-9][.|:][0-5][0-9][ |][a|A][m|M]"
+                        "|[1][0-9][.|:][0-5][0-9][ |][p|P][m|M]"
+                        "|[2][0-3][.|:][0-5][0-9]"
+                        "|[2][0-3][.|:][0-5][0-9][ |][a|A][m|M]"
+                        "|[2][0-3][.|:][0-5][0-9][ |][p|P][m|M])");
 
     if(regex_search(i_sentence, searchedResult, searchTarget))
     {
@@ -115,7 +132,14 @@ void IntentRecognizer::RegisterKeywords(const string i_sentence)
     searchTarget = regex("([t|T][o|O][d|D][a|A][y|Y]"
                         "|[t|T][o|O][m|M][o|O][r|R][r|R][o|O][w|W]"
                         "|[y|Y][e|E][s|S][t|T][e|E][r|R][d|D][a|A][y|Y]"
-                        "|[w|W][e|E][e|E][k|K][e|E][n|N][d|D][s|S])");
+                        "|[w|W][e|E][e|E][k|K][e|E][n|N][d|D][s|S]"
+                        "|[m|M][o|O][n|N][d|D][a|A][y|Y]"
+                        "|[t|T][u|U][e|E][s|S][d|D][a|A][y|Y]"
+                        "|[w|W][e|E][d|D][n|N][e|E][s|S][d|D][a|A][y|Y]"
+                        "|[t|T][h|H][u|U][r|R][s|S][d|D][a|A][y|Y]"
+                        "|[f|F][r|R][i|I][d|D][a|A][y|Y]"
+                        "|[s|S][a|A][t|T][u|U][r|R][d|D][a|A][y|Y]"
+                        "|[s|S][u|U][n|N][d|D][a|A][y|Y])");
 
     if(regex_search(i_sentence, searchedResult, searchTarget))
     {
