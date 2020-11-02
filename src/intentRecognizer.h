@@ -1,16 +1,8 @@
 #pragma once
 
-#include <vector>
+#include <string>
 
 using namespace std;
-
-enum eTopic
-{
-    TOPIC_UNDEFINED,
-    TOPIC_WEATHER,
-    TOPIC_FACT,
-    TOPIC_CALENDAR
-};
 
 class IntentRecognizer
 {
@@ -18,16 +10,18 @@ public:
 	IntentRecognizer();
 	~IntentRecognizer();
 
-    string GetIntent(const int i_numberWords, char** i_sentence);
+    string GetIntent(const int i_countWords, char** i_words);
+    string GetIntent(const string i_sentence);
+    //string GetIntent(const string i_sentence);
 
 private:
     /* Register for Keywords */
-    eTopic m_eTopic;
-    string m_Point;
-    string m_Place;
+    string m_Weather;
+    string m_Fact;
+    string m_Time;
     string m_Date;
-    string m_Time; // [HH.MM]<AM|PM>
+    string m_Place;
 
-    void RegisterKeywords(const vector<string>& i_sentence);
-    string DeduceIntent();
+    string Convert2DCharArrayToString(const int i_count, char** i_array);
+    void RegisterKeywords(const string i_sentence);
 };
