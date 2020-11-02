@@ -22,9 +22,7 @@ IntentRecognizer::~IntentRecognizer()
 
 string IntentRecognizer::GetIntent(const int i_countWords, char** i_words)
 {
-    /* Convert char** string */
     string converted = Convert2DCharArrayToString(i_countWords, i_words);
-
     return GetIntent(converted);
 }
 
@@ -72,6 +70,7 @@ string IntentRecognizer::GetIntent(const string i_sentence)
 
 string IntentRecognizer::Convert2DCharArrayToString(const int i_count, char** i_array)
 {
+    /* Convert char** to string */
     string sentence(i_array[0]);
 
     for(int i=1; i<i_count; i++)

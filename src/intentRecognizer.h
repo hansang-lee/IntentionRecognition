@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INTENT_RECOGNIZER_H
+#define INTENT_RECOGNIZER_H
 
 #include <string>
 
@@ -14,7 +15,7 @@ public:
     string GetIntent(const string i_sentence);
 
 private:
-    /* Register for Keywords */
+    /* For Keywords */
     string m_Weather;
     string m_Fact;
     string m_Time;
@@ -24,3 +25,5 @@ private:
     string Convert2DCharArrayToString(const int i_count, char** i_array);
     void RegisterKeywords(const string i_sentence);
 };
+
+#endif
