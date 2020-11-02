@@ -3,7 +3,8 @@
 > Installation
 ```
 git clone https://github.com/hansang-lee/IntentionRecognitionCommandLineTool.git
-cd ./IntentionRecognitionCommandLineTool/lib/
+mkdir lib/
+cd lib/
 git clone https://github.com/google/googletest.git
 ```
 
