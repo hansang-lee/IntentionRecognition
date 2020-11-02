@@ -1,12 +1,11 @@
 #include <iostream>
-#include "gtest/gtest.h"
-#include "IntentRecognizer.h"
+#include "intentRecognizer.h"
 
 int main(int argc, char** argv)
 {
     if(argc > 1)
     {
         IntentRecognizer ir;
-        ir.PerformIntentRecognition(argc, argv);
+        ir.PerformIntentRecognition(argc-1, &argv[1]);
     }
 }

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <regex>
-#include "IntentRecognizer.h"
+#include "intentRecognizer.h"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ void IntentRecognizer::PerformIntentRecognition(const int i_numberWords, char** 
     vector<string> words;
 
     /* Convert char* to string and push to a vector */
-    for(int i=1; i<i_numberWords; i++)
+    for(int i=0; i<i_numberWords; i++)
     {
         words.push_back(string(i_sentence[i]));
     }
@@ -36,7 +36,7 @@ void IntentRecognizer::PerformIntentRecognition(const int i_numberWords, char** 
 
 void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
 {
-    for(auto itWord=next(i_sentence.begin()); itWord!=i_sentence.end(); itWord++)
+    for(auto itWord=i_sentence.begin(); itWord!=i_sentence.end(); itWord++)
     {
         /* Extract [DATE] information */
         if(regex_match(*itWord, regex(
@@ -108,7 +108,7 @@ void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
         }
 
         /* Deduce intent of checking calendar */
-        else if(m_Time != "NONE")
+        else if((m_Time != "NONE") && (m_eTopic == TOPIC_UNDEFINED))
         {
             m_eTopic = TOPIC_CALENDAR;
         }
