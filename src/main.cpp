@@ -1,4 +1,5 @@
 #include <iostream>
+#include "gtest/gtest.h"
 #include "IntentRecognizer.h"
 
 int main(int argc, char** argv)
@@ -8,6 +9,4 @@ int main(int argc, char** argv)
         IntentRecognizer ir;
         ir.PerformIntentRecognition(argc, argv);
     }
-
-	return 0;
 }

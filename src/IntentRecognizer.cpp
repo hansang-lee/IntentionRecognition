@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <regex>
-
 #include "IntentRecognizer.h"
 
 using namespace std;

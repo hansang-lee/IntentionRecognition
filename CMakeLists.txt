@@ -1,13 +1,11 @@
-cmake_minimum_required(VERSION 3.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
 
-project(HumanIntentionRecognizer)
+PROJECT(IntentRecognizer)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+SET(CMAKE_CXX_STANDARD 17)
 
-add_executable(
-	${PROJECT_NAME}
-	src/main.cpp
-	src/IntentRecognizer.h
-	src/IntentRecognizer.cpp
-	)
+INCLUDE_DIRECTORIES(src)
+
+ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(lib/googletest)
