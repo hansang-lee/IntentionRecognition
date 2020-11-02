@@ -20,7 +20,7 @@ IntentRecognizer::~IntentRecognizer()
 
 }
 
-void IntentRecognizer::PerformIntentRecognition(const int i_numberWords, char** i_sentence)
+string IntentRecognizer::GetIntent(const int i_numberWords, char** i_sentence)
 {
     vector<string> words;
 
@@ -30,11 +30,11 @@ void IntentRecognizer::PerformIntentRecognition(const int i_numberWords, char** 
         words.push_back(string(i_sentence[i]));
     }
 
-    DeduceIntent(words);
-    ShowAnswer();
+    RegisterKeywords(words);
+    return DeduceIntent();
 }
 
-void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
+void IntentRecognizer::RegisterKeywords(const vector<string>& i_sentence)
 {
     for(auto itWord=i_sentence.begin(); itWord!=i_sentence.end(); itWord++)
     {
@@ -84,7 +84,7 @@ void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
             }
         }
 
-        /* Deduce intent of asking weather */
+        /* Register [Weather] information */
         if(regex_match(*itWord, regex(
             "([w|W][e|E][a|A][t|T][h|H][e|E][r|R]"
             "|[r|R][a|A][i|I][n|N]"
@@ -100,14 +100,14 @@ void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
             m_Point = (*itWord);
         }
 
-        /* Deduce intent of asking fact */
+        /* Register [Fact] information */
         else if(regex_match(*itWord, regex("([f|F][a|A][c|C][t|T])")))
         {
             m_eTopic = TOPIC_FACT;
             m_Point = (*itWord);
         }
 
-        /* Deduce intent of checking calendar */
+        /* Register [Calendar] information */
         else if((m_Time != "NONE") && (m_eTopic == TOPIC_UNDEFINED))
         {
             m_eTopic = TOPIC_CALENDAR;
@@ -115,71 +115,28 @@ void IntentRecognizer::DeduceIntent(const vector<string>& i_sentence)
     }
 }
 
-void IntentRecognizer::ShowAnswer()
+string IntentRecognizer::DeduceIntent()
 {
+    string strBuf("");
+
     switch(m_eTopic)
     {
         case TOPIC_WEATHER:
-            cout << "Intent: Get Weather";
-            
+            strBuf.append("Intent: Get Weather");
             if(m_Place != "NONE")
             {
-                cout << " " << "City";
+                strBuf.append(" City");
             }
-            
-            if(m_Date != "NONE")
-            {
-                cout << " " << "Date";
-            }
-            
-            if(m_Time != "NONE")
-            {
-                cout << " " << "Time";
-            }
-            
             break;
 
         case TOPIC_FACT:
-            cout << "Intent: Get Fact";
-            
-            if(m_Place != "NONE")
-            {
-                cout << " " << "City";
-            }
-
-            if(m_Date != "NONE")
-            {
-                cout << " " << "Date";
-            }
-            
-            if(m_Time != "NONE")
-            {
-                cout << " " << "Time";
-            }
-            
+            strBuf.append("Intent: Get Fact");
             break;
 
         case TOPIC_CALENDAR:
-            cout << "Intent: Check Calendar";
-            
-            if(m_Place != "NONE")
-            {
-                cout << " " << "City";
-            }
-            
-            if(m_Date != "NONE")
-            {
-                cout << " " << "Date";
-            }
-            
-            if(m_Time != "NONE")
-            {
-                cout << " " << "Time";
-            }
-
-            break;
-
-        default:
+            strBuf.append("Intent: Check Calendar");
             break;
     }
+
+    return strBuf;
 }

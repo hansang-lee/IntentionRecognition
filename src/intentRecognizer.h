@@ -18,7 +18,7 @@ public:
 	IntentRecognizer();
 	~IntentRecognizer();
 
-    void PerformIntentRecognition(const int i_numberWords, char** i_sentence);
+    string GetIntent(const int i_numberWords, char** i_sentence);
 
 private:
     /* Register for Keywords */
@@ -28,6 +28,6 @@ private:
     string m_Date;
     string m_Time; // [HH.MM]<AM|PM>
 
-    void DeduceIntent(const vector<string>& i_sentence);
-    void ShowAnswer();
+    void RegisterKeywords(const vector<string>& i_sentence);
+    string DeduceIntent();
 };
